@@ -1,5 +1,6 @@
 import time
 import numpy as np
+import argparse
 
 # Local modules from src/
 from src.data_io import read_data, adjust_sample_rate
@@ -90,13 +91,21 @@ def main(train=False, model_type="catboost"):
     end_time = time.time()
     print(f"\nTotal execution time: {end_time - start_time:.3f} seconds.")
 
-
 if __name__ == "__main__":
-    # Example usage:
-    # 1) Generate HFO data and write to hfo_data.py
-    #    python main2.py
-    # 2) Or skip generation and directly train a CatBoost model from existing hfo_data
-    #    python main2.py --train False --model_type catboost
+    parser = argparse.ArgumentParser(description="Run HFO detection and model training pipeline.")
+    parser.add_argument(
+        "--train",
+        type=bool,
+        default=False,
+        help="Flag to indicate whether to process raw EEG data and detect HFOs (True) or use existing data (False)."
+    )
+    parser.add_argument(
+        "--model_type",
+        type=str,
+        choices=["catboost", "random_forest", "transformer"],
+        default="catboost",
+        help="The type of model to train (catboost, random_forest, transformer)."
+    )
 
-    # You could parse arguments with argparse, but here's a static example:
-    main(train=False, model_type="catboost")
+    args = parser.parse_args()
+    main(train=args.train, model_type=args.model_type)
