@@ -57,6 +57,7 @@ IUI_EEG_FeatureImplementation/
 ├── sample_rates.py           # Sample rate dictionary
 ├── hfo_data.py               # Generated & updated HFO data dictionary
 ├── requirements.txt          # Required Python dependencies
+├── dataset.sh                # Script to download example dataset files
 ├── README.md                 # Project documentation
 │
 ├── EEG_Dataset/              # Your BIDS-like or raw EEG data folder
@@ -119,6 +120,24 @@ pip install -r requirements.txt
    ```bash
    python main2.py --train False --model_type transformer
    ```
+
+### Download the Dataset
+To download example dataset files, run the `dataset.sh` script:
+```bash
+bash dataset.sh
+```
+This script provides an example of how to download specific files from the dataset. **Note**: The example script does not include all dataset files. To download the complete dataset, modify or extend the `dataset.sh` script to include additional files as needed.
+
+### Contents of `dataset.sh`
+The `dataset.sh` script contains commands to download a subset of the dataset files:
+```bash
+#!/bin/sh
+curl --create-dirs https://openneuro.org/crn/datasets/ds003029/objects/a30ab8c9cd5e77fc00d7ef4f9603a0ad74a7fb17 -o CHANGES
+curl --create-dirs https://openneuro.org/crn/datasets/ds003029/objects/494dfc71d143e2fb1f66a7352dca643f1cc7d1d6 -o README
+curl --create-dirs https://openneuro.org/crn/datasets/ds003029/objects/63845f4b64008d72c5c2ac8fac426fd3b072d4f8 -o dataset_description.json
+# Additional curl commands to download further files as needed...
+```
+You can expand this script to include the full set of files required for your analysis.
 
 ## Future Work
 
