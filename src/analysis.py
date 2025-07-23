@@ -110,3 +110,32 @@ def write_hfo_values_to_py(all_segment_results, subject, run, output_file="hfo_d
         f.write(f"hfo_data = {hfo_data}\n")
 
     print(f"Wrote data for {subject} run {run} to {output_file}")
+
+# ------------------------------------------------------------
+# Helper: turn a list of (start, stop, …) events into counts
+#          per fixed-length time segment
+# ------------------------------------------------------------
+def events_to_segment_counts(events, seg_len_s, fs, n_samples):
+    """
+    Parameters
+    ----------
+    events      list[tuple]   output from HilbertDetector.compute()
+                              (start_sample, stop_sample, ...)
+    seg_len_s   float         length of a segment in seconds (e.g. 1.0)
+    fs          int           sampling rate, Hz
+    n_samples   int           total samples in the channel signal
+
+    Returns
+    -------
+    counts      list[int]     one integer per segment
+    """
+    seg_pts = int(seg_len_s * fs)
+    n_segs = int(np.ceil(n_samples / seg_pts))
+    counts = [0] * n_segs
+
+    for ev in events:
+        seg_idx = int(ev[0] // seg_pts)  # ← cast to int
+        if seg_idx < n_segs:
+            counts[seg_idx] += 1
+    return counts
+
